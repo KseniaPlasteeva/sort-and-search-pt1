@@ -11,7 +11,7 @@ class Task:
         Initializes a task with the specified name and priority.
         
         Args:
-            name: Task name
+            name:Task name
             priority: Task priority (integer)
         """
         self.__name = name
