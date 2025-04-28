@@ -81,4 +81,61 @@ class TaskMess:
             >>> TaskMess.get_pair_of_tasks(tasks)
             None
         """
-        pass
+        n = len(tasks)
+        if n <= 1:
+            return None
+        
+        priorities = [task.priority for task in tasks]
+        
+        asc_start, asc_end = TaskMess._find_unsorted_subsegment(priorities, ascending=True)
+        desc_start, desc_end = TaskMess._find_unsorted_subsegment(priorities, ascending=False)
+        
+        if asc_start is None and desc_start is None:
+            return None
+
+        if asc_start is None:
+            return (desc_start, desc_end)
+        
+        if desc_start is None:
+            return (asc_start, asc_end)
+
+        asc_len = asc_end - asc_start + 1
+        desc_len = desc_end - desc_start + 1
+        
+        if asc_len < desc_len:
+            return (asc_start, asc_end)
+        elif desc_len < asc_len:
+            return (desc_start, desc_end)
+        else:
+            return (asc_start, asc_end)
+        
+    @staticmethod
+    def _find_unsorted_subsegment(priorities: list[int], ascending: bool) -> tuple[int | None, int | None]:
+        n = len(priorities)
+        start = None
+        end = None
+
+        for i in range(n - 1):
+            if ascending:
+                if priorities[i] > priorities[i + 1]:
+                    start = i
+                    break
+            else:
+                if priorities[i] < priorities[i + 1]:
+                    start = i
+                    break
+
+        if start is None:
+            return (None, None)
+
+        for i in range(n - 1, 0, -1):
+            if ascending:
+                if priorities[i - 1] > priorities[i]:
+                    end = i
+                    break
+            else:
+                if priorities[i - 1] < priorities[i]:
+                    end = i
+                    break
+
+        return (start, end)

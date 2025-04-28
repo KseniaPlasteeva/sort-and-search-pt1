@@ -13,7 +13,7 @@ class ChocolateOptimizer:
         Args:
             chocolates (list): List of chocolate lengths (default None - empty list)
         """
-        pass
+        self._chocolates = chocolates if chocolates is not None else []
     
     def find_max_piece_size(self, friends: int) -> float:
         """
@@ -33,7 +33,26 @@ class ChocolateOptimizer:
             >>> optimizer.find_max_piece_size(10)
             2.5
         """
-        pass
+        if not self._chocolates or friends <= 0:
+            return 0
+
+        total_length = sum(self._chocolates)
+        if total_length < friends:
+            return 0
+
+        low = 1
+        high = max(self._chocolates)
+
+        while low <= high:
+            mid = (low + high) // 2
+            total_pieces = sum(length // mid for length in self._chocolates)
+
+            if total_pieces >= friends:
+                low = mid + 1
+            else:
+                high = mid - 1
+        
+        return high
 
     
     def update_chocolates(self, new_chocolates: list[int]) -> None:
@@ -46,7 +65,7 @@ class ChocolateOptimizer:
         Returns:
             None
         """
-        pass
+        self._chocolates = new_chocolates
     
     @property
     def total_length(self) -> int:
@@ -56,7 +75,7 @@ class ChocolateOptimizer:
         Returns:
             int: Sum of all chocolate lengths
         """
-        pass
+        return sum(self._chocolates)
     
     @property
     def chocolate_count(self) -> int:
@@ -66,7 +85,7 @@ class ChocolateOptimizer:
         Returns:
             int: Number of chocolates
         """
-        pass
+        return len(self._chocolates)
     
     @classmethod
     def from_string(cls, chocolate_string: str) -> 'ChocolateOptimizer':
@@ -82,4 +101,10 @@ class ChocolateOptimizer:
         Raises:
             ValueError: If the string contains invalid values
         """
-        pass
+        try:
+            chocolates = [int(x) for x in chocolate_string.split()]
+            if any(c <= 0 for c in chocolates):
+                raise ValueError("Chocolate lengths must be positive integers")
+            return cls(chocolates)
+        except ValueError as e:
+            raise ValueError

@@ -18,10 +18,26 @@ class SatelliteCalculator:
             The integer part of the square root of x
             
         Example:
-            >>> calc = SatelliteCalculator()
-            >>> calc.int_sqrt(16)
+             calc = SatelliteCalculator()
+             calc.int_sqrt(16)
             4
-            >>> calc.int_sqrt(8)
+             calc.int_sqrt(8)
             2
         """
-        pass
+        if x == 0:
+            return 0
+        
+        min = 0
+        max = x
+        while min <= max:
+            mid = (min + max) // 2
+            check = mid * mid
+
+            if check == x:
+                return mid
+            elif check > x:
+                max -= 1 
+            elif check < x:
+                min += 1
+            
+        return max

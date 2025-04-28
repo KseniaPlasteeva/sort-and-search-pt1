@@ -34,7 +34,26 @@ class FinancialDataVisualizer:
             >>> data
             [3, 11, 2, 8, 2, 6]
         """
-        pass
+        if len(data) < 3:
+            if len(data) == 1 or (len(data) == 2 and data[0] == data[1]):
+                raise ImpossibleToVisualize("Невозможно преобразовать массив")
+            else:
+                return
+            
+
+        data_sorted = sorted(data)
+        n = len(data)
+        result = [0] * n
+
+        mid = n // 2
+        result[1::2] = data_sorted[mid:]
+        result[0::2] = data_sorted[:mid]
+
+        for i in range(n - 1):
+            if (i % 2 == 0 and result[i] >= result[i+1]) or (i % 2 != 0 and result[i] <= result[i+1]):
+                 raise ImpossibleToVisualize
+
+        data[:] = result[:]
         
 
     def is_wave_pattern(self, data: list[float]) -> bool:
@@ -54,4 +73,8 @@ class FinancialDataVisualizer:
             >>> visualizer.is_wave_pattern([1, 2, 3, 4, 5])
             False
         """
-        pass
+        for i in range(len(data) - 1):
+            if (i % 2 == 0 and data[i] >= data[i+1]) or (i % 2 != 0 and data[i] <= data[i+1]):
+                return False
+
+        return True

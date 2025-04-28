@@ -14,7 +14,18 @@ class OrderedArrayIndexer:
         Args:
             data: Any array of data (default None - empty array)
         """
-        pass
+        self._original_data = data if data is not None else []
+        self._index = self._create_index()
+
+
+    def _create_index(self):
+        index_map = {}
+        for i, val in enumerate(self._original_data):
+            if val not in index_map:
+                index_map[val] = i
+        return index_map
+
+
     def get(self, element):
         """
         Finds the index of an element in the original data array.
@@ -37,7 +48,10 @@ class OrderedArrayIndexer:
             >>> indexer.get(6)
             -1
         """
-        pass
+        if element in self._index:
+            return self._index[element]
+        else:
+            return -1
     
     def update_data(self, new_data: list):
         """
@@ -49,7 +63,8 @@ class OrderedArrayIndexer:
         Returns:
             None
         """
-        pass
+        self._original_data = new_data
+        self._index = self._create_index()
     
     
     @property
@@ -60,7 +75,7 @@ class OrderedArrayIndexer:
         Returns:
             Number of elements in the array
         """
-        pass
+        return len(self._original_data)
     
     @property
     def original_data(self) -> list:
@@ -70,7 +85,7 @@ class OrderedArrayIndexer:
         Returns:
             Copy of the original unsorted data array
         """
-        pass
+        return self._original_data[:]
     
     @classmethod
     def from_unsorted(cls, unsorted_data: list):
@@ -83,4 +98,4 @@ class OrderedArrayIndexer:
         Returns:
             OrderedArrayIndexer: New instance with the original data preserved
         """
-        pass
+        return cls(unsorted_data)

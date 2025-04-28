@@ -15,7 +15,10 @@ class MultTable:
         Raises:
             ValueError: If rows or cols are less than or equal to 0
         """
-        pass
+        if rows <= 0 or cols <= 0:
+            raise ValueError("Rows and cols must be greater than 0")
+        self._rows = rows
+        self._cols = cols
     
     def find_kth_element(self, k: int) -> int:
         """
@@ -38,7 +41,29 @@ class MultTable:
             >>> table.find_kth_element(11)
             8
         """
-        pass
+        if not (1 <= k <= self.size):
+            raise ValueError
+        
+        low = 1
+        high = self.size
+        
+        while low <= high:
+            mid = (low + high) // 2
+            count = self._count_less_equal(mid)
+            
+            if count < k:
+                low = mid + 1
+            else:
+                high = mid - 1
+        
+        return low
+    
+
+    def _count_less_equal(self, value: int) -> int:
+        count = 0
+        for i in range(1, self._rows + 1):
+            count += min(value // i, self._cols)
+        return count
     
     @property
     def size(self) -> int:
@@ -48,7 +73,7 @@ class MultTable:
         Returns:
             int: Product of the number of rows and columns
         """
-        pass
+        return self._rows * self._cols
     
     def get_value(self, row: int, col: int) -> int:
         """
@@ -64,4 +89,6 @@ class MultTable:
         Raises:
             ValueError: If coordinates are outside the table
         """
-        pass
+        if not (1 <= row <= self._rows and 1 <= col <= self._cols):
+            raise ValueError
+        return row * col
