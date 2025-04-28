@@ -41,3 +41,4 @@ class SatelliteCalculator:
                 min += 1
             
         return max
+    
